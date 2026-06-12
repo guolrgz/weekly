@@ -6,7 +6,7 @@
       {{ report?.week_end || "" }}
     </p>
 
-    <el-tabs v-model="activeTab" type="border-card">
+    <el-tabs v-model="activeTab" type="border-card" @tab-click="handleTabClick">
       <el-tab-pane label="工作录入" name="entry">
         <WorkEntryForm @saved="handleEntrySaved" />
         <TodayEntries ref="todayRef" />
@@ -56,6 +56,18 @@ async function fetchReport(date) {
 function handleEntrySaved() {
   todayRef.value?.refresh();
   fetchReport(currentDate.value);
+}
+
+function handleTabClick(tab) {
+  if (tab.paneName === "stats" || tab.paneName === "preview") {
+    fetchReport(currentDate.value);
+  }
+  if (tab.paneName === "entry") {
+    todayRef.value?.refresh();
+  }
+  if (tab.paneName === "history") {
+    // HistoryList fetches on its own onMounted
+  }
 }
 
 function handleViewHistory(date) {
