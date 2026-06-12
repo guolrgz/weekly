@@ -18,7 +18,7 @@
         <WeeklyPreview :report="report" />
       </el-tab-pane>
       <el-tab-pane label="历史记录" name="history">
-        <HistoryList @view="handleViewHistory" />
+        <HistoryList ref="historyRef" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -41,6 +41,7 @@ const activeTab = ref("entry");
 const report = ref(null);
 const loading = ref(false);
 const todayRef = ref(null);
+const historyRef = ref(null);
 const currentDate = ref(dayjs().format("YYYY-MM-DD"));
 
 async function fetchReport(date) {
@@ -66,14 +67,8 @@ function handleTabClick(tab) {
     todayRef.value?.refresh();
   }
   if (tab.paneName === "history") {
-    // HistoryList fetches on its own onMounted
+    historyRef.value?.fetchEntries();
   }
-}
-
-function handleViewHistory(date) {
-  currentDate.value = date;
-  fetchReport(date);
-  activeTab.value = "stats";
 }
 
 fetchReport(currentDate.value);
