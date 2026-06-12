@@ -46,6 +46,7 @@
 
 <script setup>
 import { reactive, ref, onMounted } from "vue";
+import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 import api from "../api";
 
@@ -76,6 +77,7 @@ async function handleSubmit() {
       content: form.content,
       duration_minutes: Math.round(form.hours * 60),
     });
+    ElMessage.success("保存成功");
     form.content = "";
     form.hours = 1;
     form.date = dayjs().format("YYYY-MM-DD");
