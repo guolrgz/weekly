@@ -1,46 +1,45 @@
 <template>
-  <div v-loading="loading">
+  <div v-loading="loading" class="stats-dashboard">
     <el-empty
       v-if="!report || report.entry_count === 0"
       description="本周暂无数据"
     />
     <template v-else>
-      <el-row :gutter="16" class="stat-cards">
-        <el-col :span="6">
-          <el-statistic
-            title="本周总工时"
-            :value="report.total_hours"
-            suffix="h"
-          />
-        </el-col>
-        <el-col :span="6">
-          <el-statistic title="记录条数" :value="report.entry_count" />
-        </el-col>
-        <el-col :span="6">
-          <el-statistic
-            title="工作天数"
-            :value="report.work_days"
-            suffix="天"
-          />
-        </el-col>
-        <el-col :span="6">
-          <el-statistic title="主力分类" :value="report.top_category || '-'" />
-        </el-col>
-      </el-row>
-      <el-row :gutter="16" style="margin-top: 20px">
-        <el-col :span="12">
-          <el-card>
-            <template #header>分类占比</template>
-            <v-chart :option="pieOption" style="height: 300px" autoresize />
-          </el-card>
-        </el-col>
-        <el-col :span="12">
-          <el-card>
-            <template #header>每日耗时分布</template>
-            <v-chart :option="barOption" style="height: 300px" autoresize />
-          </el-card>
-        </el-col>
-      </el-row>
+      <div class="stat-grid">
+        <div class="stat-card stat-card--amber">
+          <span class="stat-label">本周总工时</span>
+          <span class="stat-value"
+            >{{ report.total_hours }}<small>h</small></span
+          >
+        </div>
+        <div class="stat-card stat-card--sage">
+          <span class="stat-label">记录条数</span>
+          <span class="stat-value"
+            >{{ report.entry_count }}<small>条</small></span
+          >
+        </div>
+        <div class="stat-card stat-card--rose">
+          <span class="stat-label">工作天数</span>
+          <span class="stat-value"
+            >{{ report.work_days }}<small>天</small></span
+          >
+        </div>
+        <div class="stat-card stat-card--slate">
+          <span class="stat-label">主力分类</span>
+          <span class="stat-value">{{ report.top_category || "—" }}</span>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-title">分类占比</div>
+          <v-chart :option="pieOption" style="height: 320px" autoresize />
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">每日耗时分布</div>
+          <v-chart :option="barOption" style="height: 320px" autoresize />
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -73,45 +72,166 @@ const props = defineProps({
   loading: Boolean,
 });
 
+const CHART_COLORS = ["#c8963e", "#5b8c5a", "#c25450", "#8c8068", "#b8ad93"];
+
 const pieOption = computed(() => ({
+  color: CHART_COLORS,
   tooltip: { trigger: "item", formatter: "{b}: {c}h ({d}%)" },
-  legend: { bottom: 0 },
+  legend: { bottom: 0, textStyle: { color: "#8c8068", fontSize: 13 } },
   series: [
     {
       type: "pie",
-      radius: ["45%", "75%"],
-      center: ["50%", "45%"],
+      radius: ["50%", "78%"],
+      center: ["50%", "47%"],
       data: (props.report?.category_breakdown || []).map((c) => ({
         name: c.category,
         value: c.hours,
-        itemStyle: { color: c.color },
       })),
-      label: { formatter: "{b}\n{d}%" },
+      label: { formatter: "{b}\n{d}%", fontSize: 12, color: "#8c8068" },
+      emphasis: {
+        label: { fontSize: 18, fontWeight: "bold" },
+        scaleSize: 8,
+      },
+      itemStyle: {
+        borderColor: "#fff",
+        borderWidth: 2,
+        borderRadius: 4,
+      },
     },
   ],
 }));
 
 const barOption = computed(() => ({
-  tooltip: { trigger: "axis" },
+  color: ["#c8963e"],
+  tooltip: { trigger: "axis", formatter: "{b}: {c}h" },
   xAxis: {
     type: "category",
     data: (props.report?.daily_distribution || []).map((d) => d.weekday),
+    axisLine: { lineStyle: { color: "#e8e0d0" } },
+    axisTick: { show: false },
+    axisLabel: { color: "#8c8068", fontSize: 13 },
   },
-  yAxis: { type: "value", name: "小时" },
+  yAxis: {
+    type: "value",
+    name: "小时",
+    nameTextStyle: { color: "#b8ad93", fontSize: 12 },
+    splitLine: { lineStyle: { color: "#f2ece0", type: "dashed" } },
+    axisLabel: { color: "#b8ad93", fontSize: 12 },
+  },
   series: [
     {
       type: "bar",
       data: (props.report?.daily_distribution || []).map((d) => d.hours),
-      itemStyle: { color: "#409EFF", borderRadius: [4, 4, 0, 0] },
-      barWidth: "50%",
+      itemStyle: {
+        borderRadius: [6, 6, 0, 0],
+        color: {
+          type: "linear",
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            { offset: 0, color: "#d4a84a" },
+            { offset: 1, color: "#c8963e" },
+          ],
+        },
+      },
+      barWidth: "40%",
+      emphasis: {
+        itemStyle: { color: "#b8862d" },
+      },
     },
   ],
-  grid: { left: 50, right: 20, top: 20, bottom: 30 },
+  grid: { left: 55, right: 25, top: 25, bottom: 35 },
 }));
 </script>
 
 <style scoped>
-.stat-cards .el-col {
-  text-align: center;
+.stats-dashboard {
+  max-width: 960px;
+}
+
+/* === Stat Cards === */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition:
+    box-shadow var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.stat-card--amber {
+  border-left: 3px solid #c8963e;
+}
+.stat-card--sage {
+  border-left: 3px solid #5b8c5a;
+}
+.stat-card--rose {
+  border-left: 3px solid #c25450;
+}
+.stat-card--slate {
+  border-left: 3px solid #8c8068;
+}
+
+.stat-label {
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.stat-value small {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-left: 2px;
+}
+
+/* === Charts === */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.chart-box {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+}
+
+.chart-title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 8px;
 }
 </style>

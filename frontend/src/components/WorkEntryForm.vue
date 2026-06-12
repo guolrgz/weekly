@@ -1,52 +1,47 @@
 <template>
-  <el-card class="entry-form-card">
-    <template #header>新增工作记录</template>
-    <el-form :model="form" label-width="80px" @submit.prevent="handleSubmit">
-      <el-row :gutter="16">
-        <el-col :span="6">
-          <el-form-item label="日期">
-            <el-date-picker
-              v-model="form.date"
-              type="date"
-              value-format="YYYY-MM-DD"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="分类">
-            <el-select v-model="form.category_id" style="width: 100%">
-              <el-option
-                v-for="cat in categories"
-                :key="cat.id"
-                :label="cat.name"
-                :value="cat.id"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="耗时(小时)">
-            <el-input-number
-              v-model="form.hours"
-              :min="0.5"
-              :max="24"
-              :step="0.5"
-              style="width: 100%"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="内容">
-            <el-input v-model="form.content" placeholder="简要描述工作内容" />
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-button type="primary" :loading="saving" @click="handleSubmit"
-        >保存</el-button
-      >
-    </el-form>
-  </el-card>
+  <div class="entry-form">
+    <div class="form-header">新增工作记录</div>
+    <form class="form-row" @submit.prevent="handleSubmit">
+      <div class="form-field">
+        <label class="form-label">日期</label>
+        <el-date-picker
+          v-model="form.date"
+          type="date"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </div>
+      <div class="form-field">
+        <label class="form-label">分类</label>
+        <el-select v-model="form.category_id" style="width: 100%">
+          <el-option
+            v-for="cat in categories"
+            :key="cat.id"
+            :label="cat.name"
+            :value="cat.id"
+          />
+        </el-select>
+      </div>
+      <div class="form-field form-field--narrow">
+        <label class="form-label">耗时</label>
+        <el-input-number
+          v-model="form.hours"
+          :min="0.5"
+          :max="24"
+          :step="0.5"
+          style="width: 100%"
+        />
+      </div>
+      <div class="form-field form-field--wide">
+        <label class="form-label">内容</label>
+        <el-input v-model="form.content" placeholder="简要描述工作内容" />
+      </div>
+      <button class="save-btn" type="submit" :disabled="saving">
+        <span v-if="!saving">保存</span>
+        <span v-else class="spinner" />
+      </button>
+    </form>
+  </div>
 </template>
 
 <script setup>
@@ -92,7 +87,92 @@ async function handleSubmit() {
 </script>
 
 <style scoped>
-.entry-form-card {
+.entry-form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+}
+
+.form-header {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
   margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+
+.form-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-field--narrow {
+  flex: 0 0 120px;
+}
+.form-field--wide {
+  flex: 2;
+}
+
+.form-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.save-btn {
+  height: 32px;
+  padding: 0 24px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+}
+
+.save-btn:hover {
+  background: var(--color-accent-hover);
+}
+
+.save-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

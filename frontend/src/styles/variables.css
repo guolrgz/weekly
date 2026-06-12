@@ -1,0 +1,47 @@
+:root {
+  /* === Palette === */
+  --color-bg: #faf8f5;
+  --color-surface: #ffffff;
+  --color-sidebar: #2c2416;
+  --color-sidebar-hover: #3d3424;
+  --color-sidebar-text: #b8ad93;
+  --color-sidebar-active: #c8963e;
+  --color-text: #2c2416;
+  --color-text-secondary: #8c8068;
+  --color-text-muted: #b8ad93;
+  --color-accent: #c8963e;
+  --color-accent-hover: #b8862d;
+  --color-accent-light: #faf3e5;
+  --color-border: #e8e0d0;
+  --color-border-light: #f2ece0;
+  --color-success: #5b8c5a;
+  --color-danger: #c25450;
+  --color-danger-light: #fdf0ef;
+  --color-stat-1: #faf3e5;
+  --color-stat-2: #edf5ec;
+  --color-stat-3: #fdf2f0;
+  --color-stat-4: #f0f0f8;
+
+  /* === Typography === */
+  --font-display: "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+  --font-body:
+    -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+    "Helvetica Neue", sans-serif;
+
+  /* === Spacing === */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* === Shadows === */
+  --shadow-xs: 0 1px 2px rgba(44, 36, 22, 0.04);
+  --shadow-sm: 0 1px 4px rgba(44, 36, 22, 0.06);
+  --shadow-md: 0 4px 16px rgba(44, 36, 22, 0.08);
+  --shadow-lg: 0 12px 40px rgba(44, 36, 22, 0.12);
+
+  /* === Transitions === */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}

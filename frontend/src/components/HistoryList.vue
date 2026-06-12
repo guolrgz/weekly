@@ -1,37 +1,41 @@
 <template>
-  <el-card>
-    <template #header>
+  <div class="history-list">
+    <div class="section-header">
       <span>历史周报</span>
-      <el-button
-        text
-        size="small"
-        style="float: right"
-        @click="fetchWeeks"
-        :loading="loading"
-        >刷新</el-button
+      <button class="refresh-btn" @click="fetchWeeks" :disabled="loading">
+        <svg
+          :class="{ spinning: loading }"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="15"
+          height="15"
+        >
+          <polyline points="23 4 23 10 17 10" />
+          <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="week-grid" v-if="weeks.length">
+      <div
+        class="week-card"
+        v-for="w in weeks"
+        :key="w.start"
+        @click="$emit('view', w.start)"
       >
-    </template>
-    <el-table :data="weeks" stripe v-loading="loading" v-if="weeks.length">
-      <el-table-column prop="label" label="周期" width="120" />
-      <el-table-column prop="range" label="日期范围" width="220" />
-      <el-table-column prop="total_hours" label="总工时" width="100">
-        <template #default="{ row }">{{ row.total_hours }}h</template>
-      </el-table-column>
-      <el-table-column prop="entry_count" label="记录数" width="80" />
-      <el-table-column label="操作" width="100">
-        <template #default="{ row }">
-          <el-button
-            type="primary"
-            text
-            size="small"
-            @click="$emit('view', row.start)"
-            >查看</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-empty v-else description="暂无历史记录" :image-size="60" />
-  </el-card>
+        <div class="week-label">{{ w.label }}</div>
+        <div class="week-range">{{ w.range }}</div>
+        <div class="week-stats">
+          <span>{{ w.total_hours }}h</span>
+          <span class="dot">·</span>
+          <span>{{ w.entry_count }}条</span>
+        </div>
+      </div>
+    </div>
+    <div class="entry-empty" v-else>暂无历史记录</div>
+  </div>
 </template>
 
 <script setup>
@@ -81,3 +85,107 @@ async function fetchWeeks() {
 
 onMounted(fetchWeeks);
 </script>
+
+<style scoped>
+.history-list {
+  max-width: 780px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.refresh-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.week-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.week-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.week-label {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.week-range {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-bottom: 10px;
+}
+
+.week-stats {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.dot {
+  color: var(--color-border);
+}
+
+.entry-empty {
+  text-align: center;
+  padding: 32px;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+</style>

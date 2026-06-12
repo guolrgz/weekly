@@ -1,15 +1,49 @@
 <template>
-  <div>
+  <div class="weekly-preview">
     <el-empty
       v-if="!report || report.entry_count === 0"
       description="本周暂无数据"
     />
     <template v-else>
-      <div class="preview-actions">
-        <el-button type="primary" @click="handleCopy">复制全文</el-button>
-        <el-button @click="handleExport">导出 Markdown</el-button>
+      <div class="preview-toolbar">
+        <span class="preview-label"
+          >{{ report.week_label }} · {{ report.week_start }} ~
+          {{ report.week_end }}</span
+        >
+        <div class="preview-actions">
+          <button class="action-btn action-btn--primary" @click="handleCopy">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+              <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+            </svg>
+            复制全文
+          </button>
+          <button class="action-btn" @click="handleExport">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              width="16"
+              height="16"
+            >
+              <path
+                d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"
+              />
+            </svg>
+            导出 Markdown
+          </button>
+        </div>
       </div>
-      <div class="markdown-body" v-html="rendered" />
+
+      <article class="preview-doc" v-html="rendered" />
     </template>
   </div>
 </template>
@@ -67,27 +101,108 @@ async function handleExport() {
 </script>
 
 <style scoped>
+.weekly-preview {
+  max-width: 780px;
+}
+
+.preview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.preview-label {
+  font-family: var(--font-display);
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
 .preview-actions {
-  margin-bottom: 16px;
   display: flex;
   gap: 8px;
 }
-.markdown-body {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
-  padding: 24px;
-  line-height: 1.8;
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
-.markdown-body :deep(h1) {
-  font-size: 22px;
-  margin-top: 0;
+
+.action-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-accent-light);
 }
-.markdown-body :deep(h2) {
+
+.action-btn--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.action-btn--primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: #fff;
+}
+
+.preview-doc {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 36px 40px;
+  line-height: 1.9;
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-doc :deep(h1) {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--color-accent);
+}
+
+.preview-doc :deep(h2) {
+  font-family: var(--font-display);
   font-size: 17px;
-  margin-top: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 28px 0 12px;
 }
-.markdown-body :deep(ul) {
+
+.preview-doc :deep(p) {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.preview-doc :deep(strong) {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.preview-doc :deep(ul) {
   padding-left: 20px;
+}
+
+.preview-doc :deep(li) {
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  margin: 4px 0;
 }
 </style>

@@ -1,6 +1,11 @@
 <template>
   <div class="weekly-report">
-    <h3 class="page-title">工作周报</h3>
+    <h1 class="page-title">工作周报</h1>
+    <p class="page-subtitle">
+      {{ report?.week_label || "" }} · {{ report?.week_start || "" }} ~
+      {{ report?.week_end || "" }}
+    </p>
+
     <el-tabs v-model="activeTab" type="border-card">
       <el-tab-pane label="工作录入" name="entry">
         <WorkEntryForm @saved="handleEntrySaved" />
@@ -64,7 +69,17 @@ fetchReport(currentDate.value);
 
 <style scoped>
 .page-title {
-  margin: 0 0 16px 0;
-  font-size: 20px;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 0 0 24px;
 }
 </style>

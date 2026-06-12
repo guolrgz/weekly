@@ -1,0 +1,243 @@
+/* === Base === */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* === Element Plus Theme Override === */
+:root {
+  --el-color-primary: var(--color-accent);
+  --el-color-primary-light-3: var(--color-accent-light);
+  --el-color-primary-light-5: #fdf5e6;
+  --el-color-primary-light-7: #fefaf2;
+  --el-color-primary-light-8: #fffdf7;
+  --el-color-primary-light-9: #fffefa;
+  --el-color-primary-dark-2: var(--color-accent-hover);
+  --el-color-success: var(--color-success);
+  --el-color-danger: var(--color-danger);
+  --el-color-warning: #d4a03c;
+  --el-color-info: #8c8068;
+  --el-text-color-primary: var(--color-text);
+  --el-text-color-regular: var(--color-text-secondary);
+  --el-text-color-secondary: var(--color-text-muted);
+  --el-border-color: var(--color-border);
+  --el-border-color-light: var(--color-border-light);
+  --el-border-radius-base: var(--radius-sm);
+  --el-border-radius-small: 4px;
+  --el-border-radius-round: 999px;
+  --el-bg-color: var(--color-surface);
+  --el-bg-color-page: var(--color-bg);
+  --el-box-shadow-light: var(--shadow-sm);
+  --el-box-shadow: var(--shadow-md);
+  --el-box-shadow-dark: var(--shadow-lg);
+  --el-font-size-base: 15px;
+  --el-font-size-small: 13px;
+  --el-font-size-large: 17px;
+}
+
+/* === Card Override === */
+.el-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow var(--transition-normal);
+}
+.el-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+.el-card__header {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--color-text);
+  border-bottom-color: var(--color-border-light) !important;
+  padding: 16px 20px;
+}
+.el-card__body {
+  padding: 20px;
+}
+
+/* === Button Override === */
+.el-button {
+  font-family: var(--font-body);
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+.el-button--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+.el-button--primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+.el-button--text {
+  color: var(--color-text-secondary);
+}
+.el-button--text:hover {
+  color: var(--color-accent);
+}
+
+/* === Input Override === */
+.el-input__wrapper {
+  border-radius: var(--radius-sm) !important;
+  box-shadow: none !important;
+  border: 1px solid var(--color-border);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+.el-input__wrapper:hover {
+  border-color: var(--color-accent);
+}
+.el-input__wrapper.is-focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-light) !important;
+}
+.el-select .el-input__wrapper {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* === Table Override === */
+.el-table {
+  --el-table-border-color: var(--color-border-light);
+  --el-table-header-bg-color: var(--color-bg);
+  --el-table-row-hover-bg-color: #fefcf8;
+  font-size: 14px;
+}
+.el-table th.el-table__cell {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  background: var(--color-bg);
+}
+.el-table--striped .el-table__body tr.el-table__row--striped td.el-table__cell {
+  background: #fdfbf7;
+}
+
+/* === Tab Override === */
+.el-tabs--border-card {
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  background: var(--color-surface);
+}
+.el-tabs--border-card > .el-tabs__header {
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.el-tabs--border-card > .el-tabs__header .el-tabs__item {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+  border-right: 1px solid var(--color-border-light) !important;
+}
+.el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  color: var(--color-accent);
+  background: var(--color-surface);
+  font-weight: 600;
+}
+
+/* === Dialog Override === */
+.el-dialog {
+  border-radius: var(--radius-lg);
+}
+.el-dialog__header {
+  font-family: var(--font-display);
+}
+.el-dialog__body {
+  padding: 20px 24px;
+}
+
+/* === Menu Override === */
+.el-menu {
+  border-right: none !important;
+}
+.el-menu-item {
+  font-family: var(--font-body);
+  font-size: 14px;
+  transition: all var(--transition-fast);
+}
+
+/* === Statistic Override === */
+.el-statistic__head {
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.el-statistic__number {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* === Page Transition === */
+.page-enter-active,
+.page-leave-active {
+  transition:
+    opacity var(--transition-slow),
+    transform var(--transition-slow);
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+/* === Selection === */
+::selection {
+  background: var(--color-accent-light);
+  color: var(--color-text);
+}

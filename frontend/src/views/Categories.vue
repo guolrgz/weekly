@@ -1,39 +1,26 @@
 <template>
   <div class="categories-page">
-    <el-card>
-      <template #header>
-        <span>分类管理</span>
-        <el-button
-          type="primary"
-          size="small"
-          style="float: right"
-          @click="showAdd"
-          >新增分类</el-button
-        >
-      </template>
+    <h1 class="page-title">分类管理</h1>
 
-      <el-table :data="categories" stripe v-loading="loading">
-        <el-table-column label="颜色" width="80">
-          <template #default="{ row }">
-            <span class="color-dot" :style="{ background: row.color }" />
-          </template>
-        </el-table-column>
-        <el-table-column prop="name" label="名称" />
-        <el-table-column prop="sort_order" label="排序" width="80" />
-        <el-table-column label="操作" width="160">
-          <template #default="{ row }">
-            <el-button text size="small" @click="editRow(row)">编辑</el-button>
-            <el-button
-              text
-              size="small"
-              type="danger"
-              @click="handleDelete(row.id)"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+    <div class="cat-toolbar">
+      <button class="add-btn" @click="showAdd">+ 新增分类</button>
+    </div>
+
+    <div class="cat-grid" v-loading="loading">
+      <div class="cat-card" v-for="cat in categories" :key="cat.id">
+        <span class="cat-dot" :style="{ background: cat.color }" />
+        <span class="cat-name">{{ cat.name }}</span>
+        <div class="cat-actions">
+          <button class="cat-btn" @click="editRow(cat)">编辑</button>
+          <button class="cat-btn cat-btn--danger" @click="handleDelete(cat.id)">
+            删除
+          </button>
+        </div>
+      </div>
+      <div class="cat-card cat-card--empty" v-if="!categories.length">
+        暂无分类
+      </div>
+    </div>
 
     <el-dialog
       :title="editing.id ? '编辑分类' : '新增分类'"
@@ -71,7 +58,7 @@ const loading = ref(false);
 const saving = ref(false);
 const dialogVisible = ref(false);
 const editing = ref({});
-const form = reactive({ name: "", color: "#409EFF", sort_order: 0 });
+const form = reactive({ name: "", color: "#c8963e", sort_order: 0 });
 
 async function fetchCategories() {
   loading.value = true;
@@ -86,7 +73,7 @@ async function fetchCategories() {
 function showAdd() {
   editing.value = {};
   form.name = "";
-  form.color = "#409EFF";
+  form.color = "#c8963e";
   form.sort_order = 0;
   dialogVisible.value = true;
 }
@@ -130,11 +117,110 @@ onMounted(fetchCategories);
 </script>
 
 <style scoped>
-.color-dot {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
+.page-title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 20px;
+  letter-spacing: -0.01em;
+}
+
+.cat-toolbar {
+  margin-bottom: 16px;
+}
+
+.add-btn {
+  height: 36px;
+  padding: 0 18px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.add-btn:hover {
+  background: var(--color-accent-hover);
+}
+
+.cat-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 500px;
+}
+
+.cat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: box-shadow var(--transition-fast);
+}
+
+.cat-card:hover {
+  box-shadow: var(--shadow-xs);
+}
+
+.cat-card--empty {
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  padding: 24px;
+}
+
+.cat-dot {
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  vertical-align: middle;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.cat-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.cat-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.cat-card:hover .cat-actions {
+  opacity: 1;
+}
+
+.cat-btn {
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.cat-btn:hover {
+  background: var(--color-bg);
+  color: var(--color-accent);
+}
+
+.cat-btn--danger:hover {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
 }
 </style>
