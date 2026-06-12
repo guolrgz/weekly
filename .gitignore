@@ -5,3 +5,6 @@ node_modules/
 dist/
 .superpowers/
 venv/
+.DS_Store
+*.png
+.playwright-mcp/
